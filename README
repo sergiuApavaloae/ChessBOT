@@ -1,0 +1,77 @@
+Etapa I
+
+Proiectul contine urmatoarele clase:
+
+	* clasa abstracta Tile, asociata pentru o casuta a tablei de sah
+   - contine campurile coordinate(int) si isOccupied(boolean)           
+   - metoda getPiece() care va returna piesa aflata pe casuta respectiva
+
+	* clasa EmptyTile care extinde clasa Tile
+   - reprezinta o casuta goala
+   - metoda getPiece() returneza piesa aflata pe casuta (null) 
+
+	* clasa OccupiedTile care extinde clasa Tile si reprezinta o casuta ocupta
+   - metoda getPiece() prin carese returneaza piesa de pe casuta
+   - campul de tip Piece pieceOnOccupiedTile
+
+	* enum Color pentru culoarea casutei (alb sau negru)
+   - contine metodele isWhite(), isBlack(), getOppositeDirection(), getDirection()
+
+	* clasa abstracta Piece, asociata unei piese
+   - contine campurile position(int), pieceType(string), color(Color), tile(Tile)
+   - metoda de actualizare a pozitiei piesei updatePosition(int x)
+
+	* clasa NoPiece care extinde clasa Piece
+   - metoda NoPiece prin care se construieste o piesa nula (de pe o casuta goala)
+
+	* clasa Pawn care extinde clasa Piece
+   - Pawn construieste un pion si ii atribuie o casuta ocupata
+   - metoda tryMoveDown( Board b,int unavailablePiece[])
+         ~ efectueaza o mutare specifica unui pion de culoare neagra
+   - metoda tryMoveUp( Board b,int unavailablePiece[])
+         ~ efectueaza o mutare specifica unui pion de culoare alba
+
+	* clasele Rook, King, Queen, Knight, Bishop care extind clasa Piece
+   - clase pentru fiecare piesa in parte
+
+	* clasa Board cu ajutorul careia initializam tabla de joc
+   - tabla de joc este de tip HashMap
+   - metoda updateBoard() prin care actualizam tabla dupa mutarile din force
+   - metoda printBoard() afiseaza tabla de joc
+   - searchForMoves(Color currColor,int unavailablePiece[])
+         ~ cauta prima piesa care poate sa fie mutata in functie de culoare
+         ~ testata doar pentru piesa de tip pion(pawn) deocamdata
+
+	* clasa Main
+   - clasa in care tratam pe rand comenzile new, force, resign, white, black
+
+   ** explicatii detaliate in comentariile din cod
+
+Etapa a 2-a
+	Pentru aceasta etapa am impplementat un algoritm de tip negamax pentru a 
+determina cea mai favorabila mutare intr un anumit moment.
+	-am format o lista cu toate mutarile posibile pentru fiecare piesa in parte
+si am aplicat fiecare mutare pe o clona pentru a vedea rezultatele
+	-functia de evaluare stabileste scorul la un moment dat avand in vedere 3 aspecte:
+  1.Un bonus pentru fiecare pozitie de pe tabla pentru fiecare piesa in parte 
+(fiecare piesa are definita o tabla de joc cu bonusuri de pozitie)
+ 2. Numarul total de mutari pe care le ar putea face jucatorul daca face acea mutare
+(cu cat mobilitatea este mai buna cu atat este mai bine)
+ 3.Evaluarea materialului. Am asociat fiecarui tip de piesa un punctaj iar apoi am vazut care 
+jucator are mai multe piese de acel fel .Cu alte cuvinte evaluarea materialului da un punctaj 
+in functie de care jucator are piesele mai valoroase si cu cat acestea sunt mai valoroase.
+
+	Am optat pentru depth=3 pentru a avea o adancime mai mare decat fairymax dar si sa se
+ incadreze in timp . Programul nostru va da resign cand se afla intr o situatie in care este clar 
+ca va pierde in una doua mutari.
+	-In general ii rezista lui fairymax cel putin 20 de mutari		
+
+Instructiuni de comnpilare:
+	xboard -fcp "make" -debug
+(in arhiva este si un script rulare.sh pe care il puteti rula in caz de eventuale probleme desi nu ar
+trebui sa fie cazul) 
+
+Onea Roxana- mutarile tuturor pieselor si actualizarea board-ului,minimax
+Apavaloae Sergiu- calcularea scorului pentru o anumita pozitie,functie de evaluare,minimax                 
+Tudor Eduard- gestionarea situatiilor in care regele se afla in sah sau a mutarilor care l ar pune in sah
+              partea de debug,minimax
